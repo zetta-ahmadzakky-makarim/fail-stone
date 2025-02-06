@@ -1,12 +1,35 @@
-<div class="card text-center">
-  <h5 class="card-title">{{ task.title }}</h5>
-  <p class="card-text">
-    <small class="text-body-secondary">{{ task.penaltyPoints }}</small>
-  </p>
-  <p class="card-text">{{ task.description }}</p>
-  <p class="card-text">
-    <small class="text-body-secondary">{{ task.creationDate.toDateString() }}</small>
-  </p>
-  <button class="btn btn-primary" (click)="onEdit()">Edit Server</button>
-  <router-outlet></router-outlet>
+<div class="task-detail-container">
+  <div class="task-card">
+    <h2 class="task-title">{{ task.title }}</h2>
+    <p class="task-description">{{ task.description }}</p>
+
+    <div class="task-data">
+      <span class="data-item">
+        <strong>Penalty Points:</strong> {{ task.penaltyPoints }}
+      </span>
+      <span class="data-item">
+        <strong>Created On:</strong> {{ task.creationDate.toDateString() }}
+      </span>
+      <span class="data-item">
+        <strong>Status:</strong>
+        <span [ngClass]="{'completed': task.isCompleted, 'pending': !task.isCompleted}">
+          {{ task.isCompleted ? 'Completed' : 'Pending' }}
+        </span>
+      </span>
+    </div>
+
+    <div class="equipment-section" *ngIf="task.equipment && task.equipment.length > 0">
+      <h3 class="equipment-title">Equipment</h3>
+      <ul class="equipment-list">
+        <li *ngFor="let item of task.equipment" class="equipment-item">
+          <span class="equipment-name">{{ item.name }}</span>
+          <span class="equipment-quantity">(Quantity: {{ item.quantity }})</span>
+        </li>
+      </ul>
+    </div>
+
+    <button class="edit-button" (click)="onEdit()">{{ showForm ? 'Cancel Edit' : 'Edit Task' }}</button>
+    <div *ngIf="showForm">
+      <router-outlet></router-outlet>
+    </div>
 </div>

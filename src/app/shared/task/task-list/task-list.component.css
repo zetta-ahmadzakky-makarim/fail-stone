@@ -1,18 +1,23 @@
-.card-container {
+.task-list-container {
+    padding: 32px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .task-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+    justify-content: center;
+  }
+  
+  .task-column {
     display: flex;
+    justify-content: center;
     width: 100%;
-}
+  }
 
-.row-container {
+  app-task-card {
     width: 100%;
-}
-
-.column-container {
-    padding: 0;
-}
-
-app-task-card {
-    display: flex;
-    width: 100%;
-    height: 240px;
-}
+  }

@@ -1,19 +1,20 @@
-<div class="card">
+<div class="task-card">
   <div class="card-head">
     <input
       type="checkbox"
+      class="task-checkbox"
       [checked]="task.isCompleted"
       (click)="onUpdateIsCompleted()"
     />
   </div>
   <div class="card-body">
     <h5 class="card-title">{{ task.title }}</h5>
-    <h6 class="card-subtitle mb-2 text-body-secondary">
-      {{ task.penaltyPoints }}
+    <h6 class="card-subtitle">
+      Penalty Points: {{ task.penaltyPoints }}
     </h6>
-    <h6 class="card-subtitle mb-2 text-body-secondary">
-      {{ task.creationDate.toDateString() }}
+    <h6 class="card-subtitle">
+      Created On: {{ task.creationDate.toDateString() }}
     </h6>
-    <a [routerLink]="['/tasks', task.id]" href="#" class="card-link">Details</a>
+    <a [routerLink]="['/tasks', task.id]" class="card-link">Details</a>
   </div>
 </div>

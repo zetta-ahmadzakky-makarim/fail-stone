@@ -1,39 +1,192 @@
-<div class="container">
-    <div class="row">
-        <div class="">
-            <form class="row" [formGroup]="taskForm">
-                    <div class="form-group" *ngIf="editMode">
-                        <label for="inputTitle" class="form-label">Complete Task</label>
-                        <input for="inputCompletion" type="checkbox" formControlName="isCompleted"/>
-                    </div>
-                    <div class="form-group">
-                        <label for="inputTitle" class="form-label">Task Title</label>
-                        <input type="text" class="form-control" placeholder="Input your task title!" formControlName="title">
-                    </div>
-                    <div class="form-group">
-                        <label for="inputDesc" class="form-label">Task Description</label>
-                        <input type="text" class="form-control" placeholder="Input your task description!" formControlName="description">
-                    </div>
-                    <div class="form-group">
-                        <label for="inputPenalty" class="form-label">Task Penalty Point</label>
-                        <input type="number" class="form-control" placeholder="Input your task penalty point!" formControlName="penaltyPoints">
-                    </div>
-                <div class="form-group" formArrayName="equipment">
-                    <div class="form-group-equipment-header">
-                        <label for="inputEquipment" class="form-label">Equipment Needed</label>
-                        <button class="btn btn-primary" type="button" (click)="onAddEquipment()">Add Equipment</button>
-                    </div>
-                    <div class="form-group" *ngFor="let equipGroup of controls; let equipIndex = index">
-                        <div class="form-group-equipment" [formGroupName]="equipIndex">
-                            <input type="text" class="form-control" placeholder="Input your equipment!" formControlName="name">
-                            <input type="text" class="form-control" placeholder="Input your equipment quantity!" formControlName="quantity">
-                        </div>
-                    </div>
-                </div>
-                <div class="btn-submit-container">
-                    <button type="submit" class="btn btn-primary btn-submit" (click)="onSubmit()">{{ editMode ? 'Edit task' : 'Add Task' }}</button>
-                </div>
-            </form>
-        </div>
+<div class="form-container">
+  <form class="task-form" [formGroup]="taskForm">
+    <div class="form-group-checkbox" *ngIf="editMode">
+      <label for="inputCompletion" class="form-label">Complete Task</label>
+      <input
+        id="inputCompletion"
+        type="checkbox"
+        formControlName="isCompleted"
+        class="form-checkbox"
+      />
     </div>
+
+    <div class="form-group">
+      <label for="inputTitle" class="form-label">Task Title</label>
+      <input
+        id="inputTitle"
+        type="text"
+        class="form-control"
+        placeholder="Input your task title!"
+        formControlName="title"
+      />
+      <span
+        class="text-danger"
+        *ngIf="
+          taskForm.get('title').touched &&
+          taskForm.get('title').hasError('required')
+        "
+      >
+        Please input your task title!
+      </span>
+      <span
+        class="text-danger"
+        *ngIf="taskForm.get('title').hasError('maxlength')"
+      >
+        Task Title must be at most 20 characters!
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label for="inputDesc" class="form-label">Task Description</label>
+      <textarea
+        id="inputDesc"
+        class="form-control"
+        placeholder="Input your task description!"
+        formControlName="description"
+        rows="4"
+      ></textarea>
+      <span
+        class="text-danger"
+        *ngIf="
+          taskForm.get('description').touched &&
+          taskForm.get('description').hasError('required')
+        "
+      >
+        Please input your task description!
+      </span>
+      <span
+        class="text-danger"
+        *ngIf="taskForm.get('description').hasError('maxlength')"
+      >
+        Task Description must be at most 500 characters!
+      </span>
+    </div>
+
+    <div class="form-group">
+      <label for="inputPenalty" class="form-label">Task Penalty Points</label>
+      <input
+        id="inputPenalty"
+        type="number"
+        class="form-control"
+        placeholder="Input your task penalty points!"
+        formControlName="penaltyPoints"
+        (keypress)="validateNumberInput($event)"
+        (paste)="preventPasteText($event)"
+      />
+      <span
+        class="text-danger"
+        *ngIf="
+          taskForm.get('penaltyPoints').touched &&
+          taskForm.get('penaltyPoints').hasError('required')
+        "
+      >
+        Please input your task penalty points!
+      </span>
+      <span
+        class="text-danger"
+        *ngIf="
+          taskForm.get('penaltyPoints').hasError('min') ||
+          taskForm.get('penaltyPoints').hasError('max')
+        "
+      >
+        Points must be between 10 and 100!
+      </span>
+    </div>
+
+    <div class="form-group" formArrayName="equipment">
+      <div class="form-group-equipment-header">
+        <label class="form-label">Equipment Needed</label>
+        <button
+          type="button"
+          class="btn-add-equipment"
+          (click)="onAddEquipment()"
+        >
+          Add Equipment
+        </button>
+      </div>
+      <span
+        class="text-danger"
+        *ngIf="taskForm.get('equipment').hasError('equipmentRequired')"
+      >
+        Please input at least one valid equipment with name and quantity!
+      </span>
+      <div class="equipment-list">
+        <div
+          class="form-group-equipment"
+          *ngFor="let equipGroup of controls; let equipIndex = index"
+          [formGroupName]="equipIndex"
+        >
+          <div class="equipment-input-group">
+            <div class="input-wrapper">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Equipment name"
+                formControlName="name"
+              />
+              <span
+                class="text-danger"
+                *ngIf="
+                  equipGroup.get('name').touched &&
+                  equipGroup.get('name').hasError('required')
+                "
+              >
+                Equipment name is required!
+              </span>
+              <span
+                class="text-danger"
+                *ngIf="equipGroup.get('name').hasError('maxlength')"
+              >
+                Equipment name must be at most 20 characters!
+              </span>
+            </div>
+            <div class="input-wrapper">
+              <input
+                type="number"
+                class="form-control"
+                placeholder="Quantity"
+                formControlName="quantity"
+                (keypress)="validateNumberInput($event)"
+                (paste)="preventPasteText($event)"
+              />
+              <span
+                class="text-danger"
+                *ngIf="
+                  equipGroup.get('quantity').touched &&
+                  equipGroup.get('quantity').hasError('required')
+                "
+              >
+                Equipment quantity is required!
+              </span>
+              <span
+                class="text-danger"
+                *ngIf="equipGroup.get('quantity').hasError('min')"
+              >
+                Quantity must be at least 1!
+              </span>
+              <span
+                class="text-danger"
+                *ngIf="equipGroup.get('quantity').hasError('pattern')"
+              >
+                Quantity must be a valid number!
+              </span>
+            </div>
+            <button
+              type="button"
+              class="btn-remove-equipment"
+              (click)="onRemoveEquipment(equipIndex)"
+              *ngIf="controls.length > 1"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="btn-submit-container">
+      <button type="submit" class="btn-submit" (click)="onSubmit()">
+        {{ editMode ? "Submit Task" : "Add Task" }}
+      </button>
+    </div>
+  </form>
 </div>

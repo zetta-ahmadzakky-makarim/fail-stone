@@ -9,3 +9,7 @@
     margin: 0;
     width: 100%;
 }
+
+.nav-link {
+    font-size: 18px;
+}

@@ -1,6 +1,17 @@
-<div class="card text-center mb-2">
-  <div class="card-body">
-    <h5 class="card-title">Total Penalty Points</h5>
-    <p class="card-text">{{ totalPenaltyPoints }}</p>
+<div class="homepage-container">
+  <div class="stats-card">
+    <div class="stats-card-header">
+      <h3 class="stats-card-title">Task Overview</h3>
+    </div>
+    <div class="stats-card-body">
+      <div class="stat-item">
+        <span class="stat-label">Total Penalty Points</span>
+        <span class="stat-value">{{ totalPenaltyPoints }}</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">Uncompleted Tasks</span>
+        <span class="stat-value">{{ totalUncompletedTasks }}</span>
+      </div>
+    </div>
   </div>
 </div>
