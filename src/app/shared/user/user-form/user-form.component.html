@@ -1,0 +1,206 @@
+<div class="form-container">
+  <form class="task-form" [formGroup]="userForm">
+    <!-- Name -->
+    <div class="form-group">
+      <label for="inputName" class="form-label">Name</label>
+      <input
+        id="inputName"
+        type="text"
+        class="form-control"
+        placeholder="Enter name"
+        formControlName="name"
+      />
+      <span
+        class="text-danger"
+        *ngIf="
+          userForm.get('name')?.touched &&
+          userForm.get('name')?.hasError('required')
+        "
+      >
+        Name is required!
+      </span>
+    </div>
+
+    <!-- Username -->
+    <div class="form-group">
+      <label for="inputUsername" class="form-label">Username</label>
+      <input
+        id="inputUsername"
+        type="text"
+        class="form-control"
+        placeholder="Enter username"
+        formControlName="username"
+      />
+      <span
+        class="text-danger"
+        *ngIf="
+          userForm.get('username')?.touched &&
+          userForm.get('username')?.hasError('required')
+        "
+      >
+        Username is required!
+      </span>
+    </div>
+
+    <!-- Email -->
+    <div class="form-group">
+      <label for="inputEmail" class="form-label">Email</label>
+      <input
+        id="inputEmail"
+        type="email"
+        class="form-control"
+        placeholder="Enter email"
+        formControlName="email"
+      />
+      <span
+        class="text-danger"
+        *ngIf="
+          userForm.get('email')?.touched &&
+          userForm.get('email')?.hasError('required')
+        "
+      >
+        Email is required!
+      </span>
+    </div>
+
+    <!-- Phone -->
+    <div class="form-group">
+      <label for="inputPhone" class="form-label">Phone</label>
+      <input
+        id="inputPhone"
+        type="text"
+        class="form-control"
+        placeholder="Enter phone number"
+        formControlName="phone"
+      />
+      <span
+        class="text-danger"
+        *ngIf="
+          userForm.get('phone')?.touched &&
+          userForm.get('phone')?.hasError('required')
+        "
+      >
+        Phone Number is required!
+      </span>
+    </div>
+
+    <!-- Website -->
+    <div class="form-group">
+      <label for="inputWebsite" class="form-label">Website</label>
+      <input
+        id="inputWebsite"
+        type="text"
+        class="form-control"
+        placeholder="Enter website"
+        formControlName="website"
+      />
+      <span
+        class="text-danger"
+        *ngIf="
+          userForm.get('website')?.touched &&
+          userForm.get('website')?.hasError('required')
+        "
+      >
+        Website is required!
+      </span>
+    </div>
+
+    <!-- Address FormArray -->
+    <div class="form-group" formArrayName="address">
+      <div class="form-group-equipment-header">
+        <label class="form-label">Address</label>
+        <button
+          type="button"
+          class="btn-add-equipment"
+          (click)="onAddAddress()"
+        >
+          Add Address
+        </button>
+      </div>
+
+      <div class="equipment-list">
+        <div
+          class="form-group-equipment"
+          *ngFor="let addressGroup of controls; let addressIndex = index"
+          [formGroupName]="addressIndex"
+        >
+          <div class="equipment-input-group">
+            <!-- Street -->
+            <div class="input-wrapper">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Street"
+                formControlName="street"
+              />
+              <span
+                class="text-danger"
+                *ngIf="
+                  addressGroup.get('street')?.touched &&
+                  addressGroup.get('street')?.hasError('required')
+                "
+              >
+                Street name is required!
+              </span>
+            </div>
+
+            <!-- Suite -->
+            <div class="input-wrapper">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Suite"
+                formControlName="suite"
+              />
+              <span
+                class="text-danger"
+                *ngIf="
+                  addressGroup.get('suite')?.touched &&
+                  addressGroup.get('suite')?.hasError('required')
+                "
+              >
+                Suite name is required!
+              </span>
+            </div>
+
+            <!-- City -->
+            <div class="input-wrapper">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="City"
+                formControlName="city"
+              />
+              <span
+                class="text-danger"
+                *ngIf="
+                  addressGroup.get('city')?.touched &&
+                  addressGroup.get('city')?.hasError('required')
+                "
+              >
+                City name is required!
+              </span>
+            </div>
+
+            <!-- Remove Address -->
+            <button
+              type="button"
+              class="btn-remove-equipment"
+              (click)="onRemoveAddress(addressIndex)"
+              *ngIf="controls.length > 1"
+            >
+              ×
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="btn-submit-container">
+      <button type="submit" class="btn-submit" (click)="onSubmit()">
+        {{ editMode ? "Update User" : "Add User" }}
+      </button>
+    </div>
+  </form>
+</div>

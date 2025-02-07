@@ -24,7 +24,6 @@ export class TaskFormComponent implements OnInit, OnDestroy {
   paramsSubs: Subscription;
 
   constructor(
-    private fb: FormBuilder,
     private taskService: TasksService,
     private route: ActivatedRoute
   ) {}

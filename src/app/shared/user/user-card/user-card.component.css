@@ -1,0 +1,57 @@
+.task-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .task-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+  
+  .card-head {
+    padding: 16px;
+    background-color: #607D8B;
+    border-bottom: 1px solid #e9ecef;
+    text-align: right;
+  }
+  
+  .task-checkbox {
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+  }
+  
+  .card-body {
+    padding: 16px;
+  }
+  
+  .card-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #212121;
+    margin-bottom: 8px;
+  }
+  
+  .card-subtitle {
+    font-size: 16px;
+    color: #757575;
+    margin-bottom: 4px;
+  }
+  
+  .card-link {
+    display: inline-block;
+    margin-top: 16px;
+    color: #007bff;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s ease;
+  }
+  
+  .card-link:hover {
+    color: #0056b3;
+    text-decoration: underline;
+  }

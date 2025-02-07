@@ -1,0 +1,35 @@
+<div class="task-detail-container">
+    <div class="task-card">
+      <h2 class="task-title">{{ user.name }}</h2>
+      <p class="task-description">{{ user.username }}</p>
+      <p class="task-description">{{ user.email }}</p>
+      <p class="task-description">{{ user.username }}</p>
+      <p class="task-description">{{ user.website }}</p>
+  
+      <!-- <div class="task-data">
+        <span class="data-item">
+          <strong>Street:</strong> {{ user.address.street }}
+        </span>
+        <span class="data-item">
+          <strong>Suite:</strong> {{ user.address.suite }}
+        </span>
+        <span class="data-item">
+            <strong>City:</strong> {{ user.address.city }}
+        </span>
+      </div> -->
+  
+      <!-- <div class="equipment-section" *ngIf="task.equipment && task.equipment.length > 0">
+        <h3 class="equipment-title">Equipment</h3>
+        <ul class="equipment-list">
+          <li *ngFor="let item of task.equipment" class="equipment-item">
+            <span class="equipment-name">{{ item.name }}</span>
+            <span class="equipment-quantity">(Quantity: {{ item.quantity }})</span>
+          </li>
+        </ul>
+      </div> -->
+  
+      <button class="edit-button" (click)="onEdit()">{{ showForm ? 'Cancel Edit' : 'Edit Task' }}</button>
+      <div *ngIf="showForm">
+        <router-outlet></router-outlet>
+      </div>
+  </div>
