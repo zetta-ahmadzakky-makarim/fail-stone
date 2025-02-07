@@ -13,7 +13,7 @@ import { PenaltyModule } from './penalty/penalty.module';
 
 @NgModule({
   declarations: [
-    PageNotFoundComponent
+    PageNotFoundComponent,
   ],
   imports: [
     CommonModule,

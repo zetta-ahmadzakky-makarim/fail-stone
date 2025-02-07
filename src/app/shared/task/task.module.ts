@@ -2,13 +2,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 
 // *************** Application Modules & Component Imports ***************
 import { TaskCardComponent } from './task-card/task-card.component';
 import { TaskListComponent } from './task-list/task-list.component';
 import { TaskDetailComponent } from './task-detail/task-detail.component';
 import { TaskFormComponent } from './task-form/task-form.component';
+import { ShortenPipe } from './shorten.pipe';
+import { FilterTaskNamePipe } from './filter-task-name.pipe';
 
 
 @NgModule({
@@ -16,12 +18,15 @@ import { TaskFormComponent } from './task-form/task-form.component';
     TaskCardComponent,
     TaskListComponent,
     TaskDetailComponent,
-    TaskFormComponent
+    TaskFormComponent,
+    ShortenPipe,
+    FilterTaskNamePipe
   ],
   imports: [
     CommonModule,
     RouterModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FormsModule
   ]
 })
 export class TaskModule { }

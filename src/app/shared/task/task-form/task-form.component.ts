@@ -128,7 +128,7 @@ export class TaskFormComponent implements OnInit, OnDestroy {
   private onTaskUpdated(): void{
     this.taskService.updateTask(this.taskId, this.taskForm.value);
     console.log(this.taskForm.value);
-    
+    alert('Task ' + this.taskForm.value.title + ' has been updated')
   }
 
   private onTaskAdded(): void{

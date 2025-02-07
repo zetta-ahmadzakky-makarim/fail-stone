@@ -65,6 +65,8 @@ export class TasksService {
     },
   ];
 
+  filteredTaskName = '';
+
   private editingTaskSubject = new BehaviorSubject<any>(null);
   editingTask$ = this.editingTaskSubject.asObservable();
 

@@ -1,19 +1,19 @@
 <div class="task-detail-container">
   <div class="task-card">
     <h2 class="task-title">{{ task.title }}</h2>
-    <p class="task-description">{{ task.description }}</p>
+    <p class="task-description">{{ task.description | shorten:50 }}</p>
 
     <div class="task-data">
       <span class="data-item">
         <strong>Penalty Points:</strong> {{ task.penaltyPoints }}
       </span>
       <span class="data-item">
-        <strong>Created On:</strong> {{ task.creationDate.toDateString() }}
+        <strong>Created On:</strong> {{ task.creationDate | date:'fullDate' }}
       </span>
       <span class="data-item">
         <strong>Status:</strong>
         <span [ngClass]="{'completed': task.isCompleted, 'pending': !task.isCompleted}">
-          {{ task.isCompleted ? 'Completed' : 'Pending' }}
+          {{ (task.isCompleted ? 'Completed' : 'Pending') | uppercase }}
         </span>
       </span>
     </div>

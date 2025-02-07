@@ -1,19 +1,15 @@
 <div class="container col-xs-12 col-sm-10 col-md-8">
   <div class="row">
-    <div class="">
-      <ul class="nav nav-tabs">
-        <li
-          class="nav-item"
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
-        >
-          <a class="nav-link" routerLink="/">Home</a>
+    <nav class="navbar">
+      <ul class="navbar-list">
+        <li class="navbar-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <a class="navbar-link" routerLink="/">Home</a>
         </li>
-        <li class="nav-item" routerLinkActive="active">
-          <a class="nav-link" routerLink="/tasks">Task</a>
+        <li class="navbar-item" routerLinkActive="active">
+          <a class="navbar-link" routerLink="/tasks">Task</a>
         </li>
       </ul>
-    </div>
+    </nav>
   </div>
   <div class="row">
     <router-outlet></router-outlet>
