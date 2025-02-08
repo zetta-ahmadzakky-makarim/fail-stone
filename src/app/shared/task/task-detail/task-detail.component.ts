@@ -7,12 +7,14 @@ import { Subscription } from 'rxjs';
 
 // *************** Application Services Imports ***************
 import { TasksService } from '../../tasks.service';
+import { ShortenPipe } from '../shorten.pipe';
 
 
 @Component({
   selector: 'app-task-detail',
   templateUrl: './task-detail.component.html',
   styleUrls: ['./task-detail.component.css'],
+  providers: [ShortenPipe]
 })
 export class TaskDetailComponent implements OnInit, OnDestroy {
   task: {

@@ -10,7 +10,7 @@ export class FilterTaskNamePipe implements PipeTransform {
         }
         const resultArray = [];
         for (let item of value) {
-            if (item[propName].toLowerCase().includes(filterString.toLowerCase())) {
+            if (item[propName].toLowerCase().replaceAll(' ', '').includes(filterString.toLowerCase().replace(' ', ''))) {
                 resultArray.push(item);
             }
         }
