@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { UserData } from './user.model';
-import { map, switchMap } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +14,7 @@ export class UserService {
   usersSubject = new BehaviorSubject<UserData[]>([]);
   users$ = this.usersSubject.asObservable();
 
-  private editingUserSubject = new BehaviorSubject<UserData[]>(null);
+  private editingUserSubject = new BehaviorSubject<any>(null);
   editingUser$ = this.editingUserSubject.asObservable();
 
   private newUsers = new BehaviorSubject<UserData[]>([]);
@@ -24,47 +24,56 @@ export class UserService {
 
   constructor(private http: HttpClient) {}
 
+  filteredUserName = '';
+
   fetchUsers(): void {
-    this.usersSubs = this.http
-      .get<UserData[]>(`${this.ROOT_URL}/users`)
-      .subscribe((users) => {
+    if (this.usersSubject.getValue().length === 0) {
+      this.http.get<UserData[]>(`${this.ROOT_URL}/users`).subscribe(users => {
         this.usersSubject.next(users);
       });
+    }
   }
 
-  getUsers(): Observable<UserData[]> {
+  getUsers() {
     return this.users$;
   }
 
   getUser(id: number): Observable<UserData> {
-    return new Observable((observer) => {
-      const user = this.usersSubject.getValue().find((u) => u.id === id);
-      observer.next(user);
-      observer.complete();
-    });
+    return this.usersSubject.pipe(
+      map(users => users.find(user => user.id === id)!)
+    );
   }
 
-  addUser(newUser: {
-    name: string;
-    username: string;
-    email: string;
-    phone: string;
-    website: string;
-    address: { street: string; suite: string; city: string };
-  }) {
-    return this.http
-            .post(`${this.ROOT_URL}/users`, newUser)
+  addUser(newUser: UserData) {
+    const currentUsers = this.usersSubject.getValue();
+    const newId = currentUsers.length > 0 ? Math.max(...currentUsers.map(user => user.id)) + 1 : 1;
+    const userWithId = { ...newUser, id: newId };
+    this.usersSubject.next([...currentUsers, userWithId]);
   }
 
-  updateUser(id: number, updatedUser: UserData): Observable<UserData> {
-    return this.http.put<UserData>(`${this.ROOT_URL}/users/${id}`, updatedUser);
+  updateUser(id: number, updatedUser: UserData): void {
+    const currentUsers = this.usersSubject.getValue();
+    const updatedUsers = currentUsers.map(user =>
+      user.id === id ? { ...user, ...updatedUser } : user
+    );
+  
+    this.usersSubject.next(updatedUsers);
   }
-
   setEditingUser(user: UserData[]) {
     this.editingUserSubject.next(user);
   }
 
   resetEditingUser(): void {
     this.editingUserSubject.next(null);
+  }
+
+  deleteUser(id: number): void {
+    const currentUsers = this.usersSubject.getValue();
+    const updatedUsers = currentUsers.filter(user => user.id !== id);
+    this.usersSubject.next(updatedUsers);
+  }
+
+  getTotalUsers() {
+    return this.usersSubject.getValue().length;
   }
 }

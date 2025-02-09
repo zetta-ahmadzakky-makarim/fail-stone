@@ -1,0 +1,21 @@
+<div class="task-list-container">
+    <app-user-form></app-user-form>
+    <div class="input-container">
+      <input
+        type="text"
+        [(ngModel)]="filteredUserName"
+        placeholder="Search by name..."
+        class="search-input"
+      />
+      <div class="magnify-icon">
+        <i class="fas fa-search"></i>
+      </div>
+    </div>
+    <div class="task-grid">
+      <div
+        class="task-column"
+        *ngFor="let user of users | filterName: filteredUserName: 'name'">
+        <app-user-card [user]="user"></app-user-card>
+      </div>
+    </div>
+  </div>

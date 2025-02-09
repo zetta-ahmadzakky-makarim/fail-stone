@@ -3,12 +3,23 @@
     <nav class="navbar">
       <ul class="navbar-list">
         <li class="navbar-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-          <a class="navbar-link" routerLink="/">Home</a>
+          <a class="navbar-link" routerLink="/">{{ 'HOME' | translate }}</a>
         </li>
         <li class="navbar-item" routerLinkActive="active">
-          <a class="navbar-link" routerLink="/users">User</a>
+          <a class="navbar-link" routerLink="/users">{{ 'USER' | translate }}</a>
         </li>
       </ul>
+
+      <div class="language-switcher">
+        <button *ngIf="currentLanguage === 'id'" (click)="changeLanguage('en')" class="language-button">
+          <span class="flag-icon flag-icon-gb"></span>
+          <span>English</span>
+        </button>
+        <button *ngIf="currentLanguage === 'en'" (click)="changeLanguage('id')" class="language-button">
+          <span class="flag-icon flag-icon-id"></span>
+          <span>Bahasa Indonesia</span>
+        </button>
+      </div>
     </nav>
   </div>
   <div class="row">

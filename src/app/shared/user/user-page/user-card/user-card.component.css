@@ -14,15 +14,23 @@
   
   .card-head {
     padding: 16px;
-    background-color: #607D8B;
+    background-color: #f1f1f1;
     border-bottom: 1px solid #e9ecef;
     text-align: right;
   }
   
-  .task-checkbox {
+  .btn-remove-equipment {
+    background-color: transparent;
+    border: none;
+    color: #ff4444;
     cursor: pointer;
-    width: 18px;
-    height: 18px;
+    font-size: 16px;
+    padding: 4px 8px;
+    transition: color 0.3s ease;
+  }
+  
+  .btn-remove-equipment:hover {
+    color: #cc0000;
   }
   
   .card-body {
@@ -55,3 +63,4 @@
     color: #0056b3;
     text-decoration: underline;
   }
+

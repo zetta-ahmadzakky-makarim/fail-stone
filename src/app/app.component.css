@@ -21,6 +21,7 @@
 .navbar-list {
   list-style: none;
   margin: 0;
+  margin-left: 8px;
   padding: 0;
   display: flex;
   gap: 20px;
@@ -59,4 +60,45 @@
 .navbar-item.active .navbar-link {
   color: #007bff;
   font-weight: bold;
+}
+
+.language-switcher {
+  display: flex;
+  align-items: center;
+  margin-right: 8px;
+}
+
+.language-button {
+  display: flex;
+  align-items: center;
+  background-color: #007bff;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.language-button:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+}
+
+.flag-icon {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+  background-size: cover;
+  background-position: center;
+}
+
+.flag-icon-gb {
+  background-image: url('https://flagcdn.com/gb.svg');
+}
+
+.flag-icon-id {
+  background-image: url('https://flagcdn.com/id.svg');
 }

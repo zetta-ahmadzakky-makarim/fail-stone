@@ -1,0 +1,49 @@
+{
+  "USER_OVERVIEW": "User Overview",
+  "TOTAL_USER": "Total Users",
+
+  "NAME": "Name",
+  "NAME_PLACEHOLDER": "Enter Name",
+  "NAME_VALIDATOR": "Name is Required!",
+
+  "USERNAME": "Username",
+  "USERNAME_PLACEHOLDER": "Enter Name",
+  "USERNAME_VALIDATOR": "Username is Required!",
+
+  "EMAIL": "Email",
+  "EMAIL_PLACEHOLDER": "Enter Name",
+  "EMAIL_VALIDATOR": "Email is Required!",
+  "EMAIL_INVALID": "Please enter a valid email address ",
+
+  "PHONE": "Phone",
+  "PHONE_PLACEHOLDER": "Enter phone number",
+  "PHONE_VALIDATOR": "Phone number is Required!",
+
+  "WEBSITE": "Website",
+  "WEBSITE_PLACEHOLDER": "Enter website",
+  "WEBSITE_VALIDATOR": "Website is Required!!",
+
+  "ADDRESS": "Address",
+  "STREET_PLACEHOLDER": "Street",
+  "STREET_VALIDATOR": "Street name is Required!",
+  "SUITE_PLACEHOLDER": "Suite",
+  "SUITE_VALIDATOR": "Suite name is Required!",
+  "CITY_PLACEHOLDER": "City",
+  "CITY_VALIDATOR": "City name is Required!",
+
+  "ADD_ADDRESS": "Add Address",
+
+  "ADD_USER": "Add User",
+
+  "EDIT_USER": "Edit User",
+
+  "CANCEL_EDIT": "Cancel Edit",
+
+  "UPDATE_USER": "Update User",
+
+  "HOME": "Home",
+
+  "USER": "User",
+
+  "USER_DETAIL": "User Detail"
+}

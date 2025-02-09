@@ -1,0 +1,40 @@
+<div class="user-detail-card">
+  <h2 class="user-detail-title">User Details</h2>
+  <div class="user-detail-content">
+    <div class="user-detail-row">
+      <span class="user-detail-label">{{'NAME' | translate}}:</span>
+      <span class="user-detail-value">{{ user?.name }}</span>
+    </div>
+    <div class="user-detail-row">
+      <span class="user-detail-label">{{'USERNAME' | translate}}:</span>
+      <span class="user-detail-value">{{ user?.username }}</span>
+    </div>
+    <div class="user-detail-row">
+      <span class="user-detail-label">{{'EMAIL' | translate}}:</span>
+      <span class="user-detail-value">{{ user?.email }}</span>
+    </div>
+    <div class="user-detail-row">
+      <span class="user-detail-label">{{'PHONE' | translate}}:</span>
+      <span class="user-detail-value">{{ user?.phone }}</span>
+    </div>
+    <div class="user-detail-row">
+      <span class="user-detail-label">{{'WEBSITE' | translate}}:</span>
+      <span class="user-detail-value">{{ user?.website }}</span>
+    </div>
+    <div
+      class="user-detail-row"
+      *ngFor="let addr of user.address; let i = index"
+    >
+      <span class="user-detail-label">{{'ADDRESS' | translate}} {{ i + 1 }}:</span>
+      <span class="user-detail-value">
+        {{ addr?.street }}, {{ addr?.suite }}, {{ addr?.city }}
+      </span>
+    </div>
+  </div>
+  <button class="edit-button" (click)="onEdit()">
+    {{ (showForm ? "CANCEL_EDIT" : "EDIT_USER") | translate }}
+  </button>
+  <div *ngIf="showForm">
+    <router-outlet></router-outlet>
+  </div>
+</div>

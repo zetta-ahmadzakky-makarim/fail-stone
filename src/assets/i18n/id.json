@@ -1,0 +1,49 @@
+{
+  "USER_OVERVIEW": "Statistik Pengguna",
+  "TOTAL_USER": "Total Pengguna",
+
+  "NAME": "Nama",
+  "NAME_PLACEHOLDER": "Masukkan nama",
+  "NAME_VALIDATOR": "Nama wajib diisi!",
+
+  "USERNAME": "Username",
+  "USERNAME_PLACEHOLDER": "Masukkan username",
+  "USERNAME_VALIDATOR": "Username wajib diisi!",
+
+  "EMAIL": "Email",
+  "EMAIL_PLACEHOLDER": "Masukkan email",
+  "EMAIL_VALIDATOR": "Email wajib diisi!",
+  "EMAIL_INVALID": "Tolong masukkan alamat email yang valid!",
+
+  "PHONE": "No Telepon",
+  "PHONE_PLACEHOLDER": "Masukkan nomor telepon",
+  "PHONE_VALIDATOR": "Nomor telepon wajib diisi!",
+
+  "WEBSITE": "Situs",
+  "WEBSITE_PLACEHOLDER": "Masukkan situs web",
+  "WEBSITE_VALIDATOR": "Situs web wajib diisi!",
+
+  "ADDRESS": "Alamat",
+  "STREET_PLACEHOLDER": "Jalan",
+  "STREET_VALIDATOR": "Nama jalan wajib diisi!",
+  "SUITE_PLACEHOLDER": "Blok",
+  "SUITE_VALIDATOR": "Nama blok/unit wajib diisi!",
+  "CITY_PLACEHOLDER": "Kota",
+  "CITY_VALIDATOR": "Nama kota wajib diisi!",
+
+  "ADD_ADDRESS": "Tambah alamat",
+
+  "ADD_USER": "Tambah pengguna",
+
+  "EDIT_USER": "Edit pengguna",
+
+  "CANCEL_EDIT": "Batalkan Edit",
+
+  "UPDATE_USER": "Perbarui Pengguna",
+
+  "HOME": "Beranda",
+
+  "USER": "Pengguna",
+
+  "USER_DETAIL": "Detail Pengguna"
+}

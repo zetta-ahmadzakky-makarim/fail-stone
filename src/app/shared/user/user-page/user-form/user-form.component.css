@@ -124,6 +124,11 @@
   font-family: "Roboto";
 }
 
+.btn-submit:disabled {
+  background-color: #00796b;
+  cursor: not-allowed;
+}
+
 .btn-submit:hover {
   background-color: #00796b;
 }
