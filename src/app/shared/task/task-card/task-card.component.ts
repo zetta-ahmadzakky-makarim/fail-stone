@@ -1,10 +1,8 @@
 // *************** Angular Imports ***************
 import { Component, Input } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 
 // *************** Application Services Imports ***************
 import { TasksService } from '../../tasks.service';
-
 
 @Component({
   selector: 'app-task-card',
@@ -12,18 +10,25 @@ import { TasksService } from '../../tasks.service';
   styleUrls: ['./task-card.component.css']
 })
 export class TaskCardComponent {
-  @Input() task: { id: number, title: string, description: string, isCompleted: boolean, penaltyPoints: number, creationDate: Date, equipment: {name: string, quantity: number}[] };
 
+  // *************** Decorator Variables
+  @Input() task: { 
+    id: number, 
+    title: string, 
+    description: string, 
+    isCompleted: boolean, 
+    penaltyPoints: number, 
+    creationDate: Date, 
+    equipment: { name: string, quantity: number }[] 
+  };
+
+  // *************** Private Variables
   constructor(private taskService: TasksService) { }
 
-  onUpdateIsCompleted(): void{
+  // *************** Function For Completing Task and Displaying Alert
+  onUpdateIsCompleted(): void {
     this.taskService.updateIsCompleted(this.task.id, { isCompleted: !this.task.isCompleted });
-    let message = ''
-    if (this.task.isCompleted) {
-      message = ' is done'
-    } else {
-      message = ' is not done'
-    }
-    alert(this.task.title + message)
+    let message = this.task.isCompleted ? ' is done' : ' is not done';
+    alert(this.task.title + message);
   }
 }

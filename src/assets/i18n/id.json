@@ -1,6 +1,6 @@
 {
-  "USER_OVERVIEW": "Statistik Pengguna",
-  "TOTAL_USER": "Total Pengguna",
+  "USER_TITLE": "Sistem Manajemen Pengguna",
+  "USER_SUBTITLE": "Lihat, Tambah, Edit, dan Hapus Pengguna Sesuka Hatimu",
 
   "NAME": "Nama",
   "NAME_PLACEHOLDER": "Masukkan nama",

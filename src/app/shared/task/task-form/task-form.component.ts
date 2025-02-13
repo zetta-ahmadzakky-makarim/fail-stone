@@ -8,7 +8,7 @@ import { Subscription } from 'rxjs';
 
 // *************** Application Services Imports ***************
 import { TasksService } from '../../tasks.service';
-
+import { SubSink } from 'subsink';
 
 @Component({
   selector: 'app-task-form',
@@ -16,12 +16,16 @@ import { TasksService } from '../../tasks.service';
   styleUrls: ['./task-form.component.css'],
 })
 export class TaskFormComponent implements OnInit, OnDestroy {
+
+  // *************** Form Variables ***************
   taskForm: FormGroup;
+
+  // *************** State Variables ***************
   editMode: boolean = false;
   taskId: number;
-  valueChangeSubs: Subscription;
-  queryParamsSubs: Subscription;
-  paramsSubs: Subscription;
+
+  // *************** Private Variables ***************
+  private subs = new SubSink();
 
   constructor(
     private taskService: TasksService,
@@ -35,7 +39,8 @@ export class TaskFormComponent implements OnInit, OnDestroy {
     this.formValueChanges();
   }
 
-  private initTaskForm(): void{
+  // *************** Function For Initialize taskForm
+  private initTaskForm(): void {
     this.taskForm = new FormGroup({
       'id': new FormControl<number>(null),
       'title': new FormControl<string>(null, [Validators.required, Validators.maxLength(20)]),
@@ -47,8 +52,9 @@ export class TaskFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  private formValueChanges() {
-    this.valueChangeSubs = this.taskForm.valueChanges.subscribe((updatedTask) => {
+  // *************** Function For Subscribing To Form Value Changes And Updates The Tditing Task In The Service.
+  private formValueChanges(): void {
+    this.subs.sink = this.taskForm.valueChanges.subscribe((updatedTask) => {
       if (this.editMode) {
         const { creationDate, ...taskData } = updatedTask;
         this.taskService.setEditingTask({ id: this.taskId, creationDate: this.taskService.getTask(this.taskId)?.creationDate, ...taskData });
@@ -56,14 +62,16 @@ export class TaskFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  private taskQueryParamsSubs(): void{
-    this.queryParamsSubs = this.route.queryParams.subscribe((queryParams) => {
+  // *************** Function For Subscribing To Route Query Parameters To Determine if The Form Is In Edit Mode.
+  private taskQueryParamsSubs(): void {
+    this.subs.sink = this.route.queryParams.subscribe((queryParams) => {
       this.editMode = queryParams['editMode'] === 'true';
     });
   }
 
-  private taskParamsSubs(): void{
-    this.paramsSubs = this.route.parent.params.subscribe((param: Params) => {
+  // *************** Function For Subscribing To Route Parameters To Get And Populate Task Data If an ID Exists.
+  private taskParamsSubs(): void {
+    this.subs.sink = this.route.parent.params.subscribe((param: Params) => {
       if (param['id']) {
         this.taskId = +param['id'];
         const task = this.taskService.getTask(this.taskId);
@@ -96,57 +104,61 @@ export class TaskFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  onAddEquipment(): void{
+  // *************** Function For Adding an Equipment FormArray
+  onAddEquipment(): void {
     const equipmentArray = this.taskForm.get('equipment') as FormArray;
-    console.log('ini equipmentArray', equipmentArray)
+    console.log('ini equipmentArray', equipmentArray);
     equipmentArray.push(new FormGroup({
       'name': new FormControl<string>(null, [Validators.required, Validators.maxLength(20)]),
       'quantity': new FormControl<number>(null, [Validators.required, Validators.pattern('^[0-9]+$'), Validators.min(1)]),
     }));
   }
 
-  onRemoveEquipment(equipmentIndex: number): void{
+  // *************** Function For Removing A Certain Equipment FormArray If There Are More Than One Array
+  onRemoveEquipment(equipmentIndex: number): void {
     const equipmentArray = this.taskForm.get('equipment') as FormArray;
     if (equipmentArray.length > 0) {
       equipmentArray.removeAt(equipmentIndex);
     }
   }
 
-  onSubmit(): void{
+  // *************** Function For Button Click Action In Template
+  onSubmit(): void {
     if (this.editMode) {
-      this.onTaskUpdated()
+      this.onTaskUpdated();
     } else {
       if (this.taskForm.valid) {
-        this.onTaskAdded()
+        this.onTaskAdded();
       } else {
-        alert('Please fill all field with valid data!')
+        alert('Please fill all fields with valid data!');
       }
     }
   }
 
-  private onTaskUpdated(): void{
+  // *************** Function For Sending Data That Needed in updateTask Function In UserService
+  private onTaskUpdated(): void {
     this.taskService.updateTask(this.taskId, this.taskForm.value);
     console.log(this.taskForm.value);
-    alert('Task ' + this.taskForm.value.title + ' has been updated')
+    alert('Task ' + this.taskForm.value.title + ' has been updated');
   }
 
-  private onTaskAdded(): void{
+  // *************** Function For Sending Data That Needed in addTask Function In UserService Then Reset taskForm And Clear FormArray Equipment
+  private onTaskAdded(): void {
     const newTask = this.taskForm.value;
     this.taskService.addTask(this.taskForm.value);
     console.log(newTask);
     this.taskForm.reset();
     (this.taskForm.get('equipment') as FormArray).clear();
-    alert('Task ' + newTask.title + ' has been successfully added')
+    alert('Task ' + newTask.title + ' has been successfully added');
   }
 
-  get controls() {
+  get equipmentControls() {
     return (this.taskForm.get('equipment') as FormArray).controls;
   }
 
-
+  // *************** Function For Preventing User To Input Other Than Number
   validateNumberInput(event: KeyboardEvent): boolean {
     const charCode = event.which ? event.which : event.keyCode;
-
     if (charCode < 48 || charCode > 57) {
       event.preventDefault();
       return false;
@@ -154,18 +166,17 @@ export class TaskFormComponent implements OnInit, OnDestroy {
     return true;
   }
 
+  // *************** Function For Preventing User To Paste Something to Input Fields
   preventPasteText(event: ClipboardEvent): void {
     const clipboardData = event.clipboardData || (window as any).clipboardData;
     const pastedText = clipboardData.getData('text');
-  
+
     if (!/^\d+$/.test(pastedText)) {
       event.preventDefault();
     }
   }
 
   ngOnDestroy(): void {
-    this.valueChangeSubs.unsubscribe();
-    this.queryParamsSubs.unsubscribe();
-    this.paramsSubs.unsubscribe();
+    this.subs.unsubscribe
   }
 }

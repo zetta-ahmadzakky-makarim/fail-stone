@@ -7,7 +7,7 @@ import { Subscription } from 'rxjs';
 
 // *************** Application Services Imports ***************
 import { TasksService } from '../../tasks.service';
-
+import { SubSink } from 'subsink';
 
 @Component({
   selector: 'app-task-detail',
@@ -15,6 +15,8 @@ import { TasksService } from '../../tasks.service';
   styleUrls: ['./task-detail.component.css'],
 })
 export class TaskDetailComponent implements OnInit, OnDestroy {
+
+  // *************** State Variables ***************
   task: {
     id: number;
     title: string;
@@ -25,9 +27,10 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
     equipment: { name: string; quantity: number; }[];
   };
   taskId: number;
-  paramsSubscription: Subscription;
-  editingTaskSubscription: Subscription;
   showForm: boolean = false;
+
+  // *************** Private Variables ***************
+  private subs = new SubSink();
 
   constructor(
     private taskService: TasksService,
@@ -36,21 +39,14 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.paramsSubscription = this.route.params.subscribe((params: Params) => {
+    this.subs.sink = this.route.params.subscribe((params: Params) => {
       this.taskId = +this.route.snapshot.params['id'];
       this.task = this.taskService.getTask(this.taskId);
     });
     console.log(this.task);
-    
   }
 
-  ngOnDestroy(): void {
-    this.paramsSubscription.unsubscribe();
-    if (this.editingTaskSubscription) {
-      this.editingTaskSubscription.unsubscribe();
-    }
-  }
-
+  // *************** Function For Displaying Form And Fill The Form Fields With Data
   onEdit(): void {
     this.showForm = !this.showForm;
     if (this.showForm) {
@@ -60,7 +56,7 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
         queryParamsHandling: 'merge',
       });
 
-      this.editingTaskSubscription = this.taskService.editingTask$.subscribe(
+      this.subs.sink = this.taskService.editingTask$.subscribe(
         (updatedTask) => {
           if (updatedTask && updatedTask.id === this.taskId) {
             this.task = updatedTask;
@@ -70,10 +66,10 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
     } else {
       this.task = this.taskService.getTask(this.taskId);
       this.router.navigate(['.'], { relativeTo: this.route, queryParamsHandling: 'merge' });
-
-      if (this.editingTaskSubscription) {
-        this.editingTaskSubscription.unsubscribe();
-      }
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
   }
 }

@@ -1,15 +1,19 @@
 <div class="task-detail-container">
   <div class="task-card">
+    <!-- *************** Task Title and Description *************** -->
     <h2 class="task-title">{{ task.title }}</h2>
     <p class="task-description">{{ task.description | shorten:50 }}</p>
 
     <div class="task-data">
+      <!-- *************** Task Penalty Points *************** -->
       <span class="data-item">
         <strong>Penalty Points:</strong> {{ task.penaltyPoints }}
       </span>
+      <!-- *************** Task Creation Date *************** -->
       <span class="data-item">
         <strong>Created On:</strong> {{ task.creationDate | date:'fullDate' }}
       </span>
+      <!-- *************** Task Completion Status *************** -->
       <span class="data-item">
         <strong>Status:</strong>
         <span [ngClass]="{'completed': task.isCompleted, 'pending': !task.isCompleted}">
@@ -18,6 +22,7 @@
       </span>
     </div>
 
+    <!-- *************** Task Equipment List *************** -->
     <div class="equipment-section" *ngIf="task.equipment && task.equipment.length > 0">
       <h3 class="equipment-title">Equipment</h3>
       <ul class="equipment-list">
@@ -28,6 +33,7 @@
       </ul>
     </div>
 
+    <!-- *************** Task Edit Button *************** -->
     <button class="edit-button" (click)="onEdit()">{{ showForm ? 'Cancel Edit' : 'Edit Task' }}</button>
     <div *ngIf="showForm">
       <router-outlet></router-outlet>

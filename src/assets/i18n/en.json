@@ -1,6 +1,6 @@
 {
-  "USER_OVERVIEW": "User Overview",
-  "TOTAL_USER": "Total Users",
+  "USER_TITLE": "User Management System",
+  "USER_SUBTITLE": "See, Add, Edit, and Delete User as You Wish",
 
   "NAME": "Name",
   "NAME_PLACEHOLDER": "Enter Name",

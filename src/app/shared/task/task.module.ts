@@ -9,9 +9,10 @@ import { TaskCardComponent } from './task-card/task-card.component';
 import { TaskListComponent } from './task-list/task-list.component';
 import { TaskDetailComponent } from './task-detail/task-detail.component';
 import { TaskFormComponent } from './task-form/task-form.component';
+
+// *************** Utilities and Pipes Imports ***************
 import { ShortenPipe } from '../shorten.pipe';
 import { FilterTaskNamePipe } from './filter-task-name.pipe';
-
 
 @NgModule({
   declarations: [
@@ -20,13 +21,13 @@ import { FilterTaskNamePipe } from './filter-task-name.pipe';
     TaskDetailComponent,
     TaskFormComponent,
     ShortenPipe,
-    FilterTaskNamePipe
+    FilterTaskNamePipe,
   ],
   imports: [
     CommonModule,
     RouterModule,
     ReactiveFormsModule,
-    FormsModule
-  ]
+    FormsModule,
+  ],
 })
-export class TaskModule { }
+export class TaskModule {}

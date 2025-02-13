@@ -1,5 +1,7 @@
 // *************** Angular Imports ***************
 import { Component, OnInit } from '@angular/core';
+
+// *************** Third-Party Library Imports ***************
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -8,19 +10,21 @@ import { TranslateService } from '@ngx-translate/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  // *************** State Variables ***************
   title = 'fail-stone';
   currentLanguage = 'en';
 
   constructor(private translate: TranslateService) {
-    translate.addLangs(['en', 'id']),
-    translate.setDefaultLang('en'),
-    translate.use('en')
+    this.translate.addLangs(['en', 'id']);
+    this.translate.setDefaultLang('en');
+    this.translate.use('en');
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
   }
 
-  changeLanguage(lang: string) {
+  // *************** Function For Change Current Language
+  changeLanguage(lang: string): void {
     this.currentLanguage = lang;
     this.translate.use(lang);
     localStorage.setItem('language', lang);

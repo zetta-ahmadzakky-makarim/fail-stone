@@ -1,23 +1,33 @@
-import { Component, OnInit } from '@angular/core';
+// *************** Angular Imports ***************
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { UserService } from '../../../user.service';
 import { ActivatedRoute, Params } from '@angular/router';
+
+// *************** Third-Party Library Imports ***************
+import { Subscription } from 'rxjs';
 import Swal from 'sweetalert2';
+
+// *************** Application Services Imports ***************
+import { UserService } from '../../../user.service';
 
 @Component({
   selector: 'app-user-form',
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.css'],
 })
-export class UserFormComponent implements OnInit {
+export class UserFormComponent implements OnInit, OnDestroy {
+  // *************** Form Variables ***************
   userForm: FormGroup;
+
+  // *************** State Variables ***************
   editMode: boolean = false;
   userId: number;
-  valueChangeSubs: Subscription;
-  queryParamsSubs: Subscription;
-  paramsSubs: Subscription;
   isFormValid: boolean = false;
+
+  // *************** Private Variables ***************
+  private valueChangeSubs: Subscription;
+  private queryParamsSubs: Subscription;
+  private paramsSubs: Subscription;
 
   constructor(
     private userService: UserService,
@@ -32,44 +42,33 @@ export class UserFormComponent implements OnInit {
     this.trackFormStatus();
   }
 
+  // *************** Function For Initialize userForm
   private initUserForm(): void {
     this.userForm = new FormGroup({
       id: new FormControl<number>(null),
-      name: new FormControl<string>(null, [
-        Validators.required,
-      ]),
-      username: new FormControl<string>(null, [
-        Validators.required,
-      ]),
-      email: new FormControl<string>(null, [
-        Validators.required,
-        Validators.email,
-      ]),
-      phone: new FormControl<String>(null, [
-        Validators.required,
-      ]),
-      website: new FormControl<string>(null, [
-        Validators.required,
-      ]),
+      name: new FormControl<string>(null, [Validators.required]),
+      username: new FormControl<string>(null, [Validators.required]),
+      email: new FormControl<string>(null, [Validators.required, Validators.email]),
+      phone: new FormControl<string>(null, [Validators.required]),
+      website: new FormControl<string>(null, [Validators.required]),
       address: new FormArray([]),
     });
   }
 
-  private trackFormStatus() {
+  private trackFormStatus(): void {
     this.userForm.statusChanges.subscribe((status) => {
       this.isFormValid = status === 'VALID';
     });
   }
 
-  private formValueChanges() {
-    this.valueChangeSubs = this.userForm.valueChanges.subscribe(
-      (updatedUser) => {
-        if (this.editMode) {
-          const { id, ...userData } = updatedUser;
-          this.userService.setEditingUser({ id: this.userId, ...userData });
-        }
+  // *************** Function For Subscribing TO valueChanges in userForm
+  private formValueChanges(): void {
+    this.valueChangeSubs = this.userForm.valueChanges.subscribe((updatedUser) => {
+      if (this.editMode) {
+        const { id, ...userData } = updatedUser;
+        this.userService.setEditingUser({ id: this.userId, ...userData });
       }
-    );
+    });
 
     this.userForm.get('name')?.valueChanges.subscribe((value) => {
       const sanitizedValue = this.sanitizeName(value);
@@ -77,7 +76,7 @@ export class UserFormComponent implements OnInit {
         this.userForm.get('name')?.patchValue(sanitizedValue, { emitEvent: false });
       }
     });
-  
+
     this.userForm.get('username')?.valueChanges.subscribe((value) => {
       const sanitizedValue = this.sanitizeUsername(value);
       if (value !== sanitizedValue) {
@@ -86,20 +85,24 @@ export class UserFormComponent implements OnInit {
     });
   }
 
+  // *************** Function For Preventing User To Input Other Than Alphabet And Space
   private sanitizeName(value: string): string {
     return value.replace(/[^a-zA-Z\s]/g, '');
   }
-  
+
+  // *************** Function For Preventing User To Input Other Than Alphanumeric Character And Underscore
   private sanitizeUsername(value: string): string {
     return value.replace(/[^a-zA-Z0-9_]/g, '');
   }
 
+  // *************** Function For Subscribing To Route Query Parameters To Determine if The Form Is In Edit Mode.
   private userQueryParamsSubs(): void {
     this.queryParamsSubs = this.route.queryParams.subscribe((queryParams) => {
       this.editMode = queryParams['editMode'] === 'true';
     });
   }
 
+  // *************** Function For Subscribing To Parent Route Query Parameters To PatchValue In userForm
   private userParamsSubs(): void {
     this.paramsSubs = this.route.parent.params.subscribe((param: Params) => {
       if (param['id']) {
@@ -118,27 +121,14 @@ export class UserFormComponent implements OnInit {
             const addressArray = this.userForm.get('address') as FormArray;
             addressArray.clear();
 
-            console.log(user?.address);
-
-            const addresses = Array.isArray(user.address)
-              ? user.address
-              : [user.address];
+            const addresses = Array.isArray(user.address) ? user.address : [user.address];
 
             addresses.forEach((address) => {
               addressArray.push(
                 new FormGroup({
-                  street: new FormControl<string>(
-                    address.street,
-                    Validators.required
-                  ),
-                  suite: new FormControl<string>(
-                    address.suite,
-                    Validators.required
-                  ),
-                  city: new FormControl<string>(
-                    address.city,
-                    Validators.required
-                  ),
+                  street: new FormControl<string>(address.street, Validators.required),
+                  suite: new FormControl<string>(address.suite, Validators.required),
+                  city: new FormControl<string>(address.city, Validators.required),
                 })
               );
             });
@@ -158,10 +148,9 @@ export class UserFormComponent implements OnInit {
     });
   }
 
+  // *************** Function For Adding Address Form Array
   onAddAddress(): void {
-    const addressArray = this.userForm.get('address') as FormArray;
-    console.log('ini equipmentArray', addressArray);
-    addressArray.push(
+    (this.userForm.get('address') as FormArray).push(
       new FormGroup({
         street: new FormControl<string>(null, Validators.required),
         suite: new FormControl<string>(null, Validators.required),
@@ -170,6 +159,7 @@ export class UserFormComponent implements OnInit {
     );
   }
 
+  // *************** Function For Removing A Certain Address Form Array
   onRemoveAddress(addressIndex: number): void {
     const addressArray = this.userForm.get('address') as FormArray;
     if (addressArray.length > 0) {
@@ -177,6 +167,7 @@ export class UserFormComponent implements OnInit {
     }
   }
 
+  // *************** Function For Button Click Action In Template
   onSubmit(): void {
     if (this.editMode) {
       this.onUpdateUser();
@@ -185,13 +176,13 @@ export class UserFormComponent implements OnInit {
     }
   }
 
+  // *************** Function For Sending Data That Needed in addTask Function In UserService Then Reset taskForm And Clear FormArray Equipment
   private onAddUser(): void {
     if (this.userForm.valid) {
       this.userService.addUser(this.userForm.value);
-      console.log(this.userForm.value);
       Swal.fire({
         title: 'Success!',
-        text: 'User ' + this.userForm.value.name + ' successfully added!',
+        text: `User ${this.userForm.value.name} successfully added!`,
         icon: 'success',
         confirmButtonText: 'OK',
       });
@@ -211,13 +202,13 @@ export class UserFormComponent implements OnInit {
     }
   }
 
+  // *************** Function For Sending Data That Needed in updateTask Function In UserService
   private onUpdateUser(): void {
     if (this.userForm.valid) {
       this.userService.updateUser(this.userId, this.userForm.value);
-      console.log('User updated:', this.userForm.value);
       Swal.fire({
         title: 'Success!',
-        text: this.userForm.value.name + ' data has been updated!',
+        text: `User data has been updated!`,
         icon: 'success',
         confirmButtonText: 'OK',
       });
@@ -231,7 +222,7 @@ export class UserFormComponent implements OnInit {
     }
   }
 
-  get controls() {
+  get addressControls() {
     return (this.userForm.get('address') as FormArray).controls;
   }
 

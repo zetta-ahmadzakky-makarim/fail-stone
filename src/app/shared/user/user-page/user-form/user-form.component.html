@@ -1,5 +1,6 @@
 <div class="form-container">
   <form class="task-form" [formGroup]="userForm">
+    <!-- *************** User Name Input *************** -->
     <div class="form-group">
       <label for="inputName" class="form-label">{{'NAME' | translate}}</label>
       <input
@@ -20,6 +21,7 @@
       </span>
     </div>
 
+    <!-- *************** User Username Input *************** -->
     <div class="form-group">
       <label for="inputUsername" class="form-label">{{'USERNAME' | translate}}</label>
       <input
@@ -40,6 +42,7 @@
       </span>
     </div>
 
+    <!-- *************** User Email Input *************** -->
     <div class="form-group">
       <label for="inputEmail" class="form-label">{{'EMAIL' | translate}}</label>
       <input
@@ -68,6 +71,7 @@
       </span>
     </div>
 
+    <!-- *************** User Phone Number Input *************** -->
     <div class="form-group">
       <label for="inputPhone" class="form-label">{{'PHONE' | translate}}</label>
       <input
@@ -88,6 +92,7 @@
       </span>
     </div>
 
+    <!-- *************** User Website Address Input *************** -->
     <div class="form-group">
       <label for="inputWebsite" class="form-label">{{'WEBSITE' | translate}}</label>
       <input
@@ -120,14 +125,16 @@
         </button>
       </div>
 
+      <!-- *************** User Address Array Input *************** -->
       <div class="equipment-list">
         <div
           class="form-group-equipment"
-          *ngFor="let addressGroup of controls; let addressIndex = index"
+          *ngFor="let addressGroup of addressControls; let addressIndex = index"
           [formGroupName]="addressIndex"
         >
           <div class="equipment-input-group">
 
+            <!-- *************** User Address Street Input *************** -->
             <div class="input-wrapper">
               <input
                 type="text"
@@ -146,6 +153,7 @@
               </span>
             </div>
 
+            <!-- *************** User Address Suite Input *************** -->
             <div class="input-wrapper">
               <input
                 type="text"
@@ -164,6 +172,7 @@
               </span>
             </div>
 
+            <!-- *************** User Address City Input *************** -->
             <div class="input-wrapper">
               <input
                 type="text"
@@ -182,11 +191,12 @@
               </span>
             </div>
 
+            <!-- *************** Button For Removing User Address Array *************** -->
             <button
               type="button"
               class="btn-remove-equipment"
               (click)="onRemoveAddress(addressIndex)"
-              *ngIf="controls.length > 1"
+              *ngIf="addressControls.length > 1"
             >
               ×
             </button>
@@ -195,6 +205,7 @@
       </div>
     </div>
 
+    <!-- *************** Button Action For Sumbit userForm Value *************** -->
     <div class="btn-submit-container">
       <button type="submit" class="btn-submit" (click)="onSubmit()" [disabled]="!isFormValid">
         {{ (editMode ? "UPDATE_USER" : "ADD_USER") | translate }}

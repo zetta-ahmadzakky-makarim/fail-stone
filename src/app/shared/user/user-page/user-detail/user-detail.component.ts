@@ -1,9 +1,16 @@
+// *************** Angular Imports ***************
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
-import { Subscription } from 'rxjs';
-import { UserService } from '../../../user.service';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+
+// *************** Third-Party Library Imports ***************
+import { Subscription } from 'rxjs';
+
+// *************** Application Services Imports ***************
+import { UserService } from '../../../user.service';
+
+// *************** Application Models and Settings Imports ***************
 import { UserData } from '../../../user.model';
+import { SubSink } from 'subsink';
 
 @Component({
   selector: 'app-user-detail',
@@ -11,36 +18,32 @@ import { UserData } from '../../../user.model';
   styleUrls: ['./user-detail.component.css'],
 })
 export class UserDetailComponent implements OnInit, OnDestroy {
+  // *************** State Variables ***************
   user: UserData;
   userId: number;
   originalUser: any;
-  paramsSubscription: Subscription;
-  userSubscription: Subscription;
-  editingUserSubscription: Subscription;
   showForm: boolean = false;
+
+  // *************** Private Variables ***************
+  private subs = new SubSink();
 
   constructor(
     private userService: UserService,
     private route: ActivatedRoute,
-    private router: Router,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
-    this.paramsSubscription = this.route.params.subscribe((params: Params) => {
+    // *************** getUser Data Based On Subscribed Params
+    this.subs.sink = this.route.params.subscribe((params: Params) => {
       this.userId = +params['id'];
-
-      this.userService.getUser(this.userId).subscribe((user) => {
-        this.user = { 
-          ...user, 
-          address: Array.isArray(user.address) ? user.address : [user.address] 
-        };
-      });
+      this.loadUserData()
     });
-    console.log(this.user);
   }
 
+  // *************** Funtion For getUser Data
   loadUserData(): void {
-    this.userService.getUser(this.userId).subscribe((user) => {
+    this.subs.sink = this.userService.getUser(this.userId).subscribe((user) => {
       this.user = { 
         ...user, 
         address: Array.isArray(user.address) ? user.address : [user.address] 
@@ -49,6 +52,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
     });
   }
 
+  // *************** Function For Displaying And Removing Form Then Subscribe To EditingUser So That Data In Detail Card Reactive
   onEdit(): void {
     this.showForm = !this.showForm;
     if (this.showForm) {
@@ -57,10 +61,10 @@ export class UserDetailComponent implements OnInit, OnDestroy {
         queryParams: { editMode: 'true' },
         queryParamsHandling: 'merge',
       });
-  
+
       this.originalUser = { ...this.user };
-  
-      this.editingUserSubscription = this.userService.editingUser$.subscribe(
+
+      this.subs.sink = this.userService.editingUser$.subscribe(
         (updatedUser) => {
           if (updatedUser && updatedUser.id === this.userId) {
             this.user = { ...updatedUser };
@@ -69,24 +73,17 @@ export class UserDetailComponent implements OnInit, OnDestroy {
       );
     } else {
       this.user = { ...this.originalUser };
-  
+
       this.router.navigate(['.'], {
         relativeTo: this.route,
         queryParamsHandling: 'merge',
       });
-  
-      if (this.editingUserSubscription) {
-        this.editingUserSubscription.unsubscribe();
-      }
-  
-      this.userService.setEditingUser(null); // Reset editingUser$
+
+      this.userService.setEditingUser(null);
     }
   }
 
   ngOnDestroy(): void {
-    this.paramsSubscription.unsubscribe();
-    if (this.editingUserSubscription) {
-      this.editingUserSubscription.unsubscribe();
-    }
+    this.subs.sink
   }
 }

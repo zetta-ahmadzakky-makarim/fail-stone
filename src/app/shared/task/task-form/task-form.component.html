@@ -1,5 +1,6 @@
 <div class="form-container">
   <form class="task-form" [formGroup]="taskForm">
+    <!-- *************** Task Completion Checkbox *************** -->
     <div class="form-group-checkbox" *ngIf="editMode">
       <label for="inputCompletion" class="form-label">Complete Task</label>
       <input
@@ -10,6 +11,7 @@
       />
     </div>
 
+    <!-- *************** Task Title Input *************** -->
     <div class="form-group">
       <label for="inputTitle" class="form-label">Task Title</label>
       <input
@@ -36,6 +38,7 @@
       </span>
     </div>
 
+    <!-- *************** Task Description Input *************** -->
     <div class="form-group">
       <label for="inputDesc" class="form-label">Task Description</label>
       <textarea
@@ -62,6 +65,7 @@
       </span>
     </div>
 
+    <!-- *************** Task Penalty Points Input *************** -->
     <div class="form-group">
       <label for="inputPenalty" class="form-label">Task Penalty Points</label>
       <input
@@ -93,6 +97,7 @@
       </span>
     </div>
 
+    <!-- *************** Task Equipment Array Input *************** -->
     <div class="form-group" formArrayName="equipment">
       <div class="form-group-equipment-header">
         <label class="form-label">Equipment Needed</label>
@@ -107,10 +112,11 @@
       <div class="equipment-list">
         <div
           class="form-group-equipment"
-          *ngFor="let equipGroup of controls; let equipIndex = index"
+          *ngFor="let equipGroup of equipmentControls; let equipIndex = index"
           [formGroupName]="equipIndex"
         >
           <div class="equipment-input-group">
+            <!-- *************** Task Equipment Name Input *************** -->
             <div class="input-wrapper">
               <input
                 type="text"
@@ -134,6 +140,7 @@
                 Equipment name must be at most 20 characters!
               </span>
             </div>
+            <!-- *************** Task Equipment Quantity Input *************** -->
             <div class="input-wrapper">
               <input
                 type="number"
@@ -169,7 +176,7 @@
               type="button"
               class="btn-remove-equipment"
               (click)="onRemoveEquipment(equipIndex)"
-              *ngIf="controls.length > 1"
+              *ngIf="equipmentControls.length > 1"
             >
               ×
             </button>
@@ -177,6 +184,7 @@
         </div>
       </div>
     </div>
+    <!-- *************** Task Form Action Button *************** -->
     <div class="btn-submit-container">
       <button type="submit" class="btn-submit" (click)="onSubmit()">
         {{ editMode ? "Submit Task" : "Add Task" }}

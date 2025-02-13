@@ -1,23 +1,25 @@
-.task-list-container {
-    padding: 32px 0;
-    width: 100%;
-    margin: 0 auto;
-  }
-  
-  .task-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 16px;
-    margin-top: 16px;
-    justify-content: center;
-  }
-  
-  .task-column {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-  }
+/* *************** COMPONENT *************** */
 
-  app-task-card {
-    width: 100%;
-  }
+.task-list-container {
+  padding: 32px 0;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.task-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+  justify-content: center;
+}
+
+.task-column {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+app-task-card {
+  width: 100%;
+}
