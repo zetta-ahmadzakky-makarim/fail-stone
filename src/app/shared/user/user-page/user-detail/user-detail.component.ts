@@ -2,9 +2,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 
-// *************** Third-Party Library Imports ***************
-import { Subscription } from 'rxjs';
-
 // *************** Application Services Imports ***************
 import { UserService } from '../../../user.service';
 
@@ -80,6 +77,7 @@ export class UserDetailComponent implements OnInit, OnDestroy {
       });
 
       this.userService.setEditingUser(null);
+
     }
   }
 
