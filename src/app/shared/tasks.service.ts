@@ -70,23 +70,43 @@ export class TasksService {
   private editingTaskSubject = new BehaviorSubject<any>(null);
   editingTask$ = this.editingTaskSubject.asObservable();
 
+  /**
+   * Retrieves all tasks.
+   * @returns Array of tasks.
+   */
   getTasks() {
     return this.tasks;
   }
 
+  /**
+   * Retrieves a task by its ID.
+   * @param id - The ID of the task to retrieve.
+   * @returns The task object if found, otherwise undefined.
+   */
   getTask(id: number) {
     const task = this.tasks.find((task) => task.id === id);
     return task;
   }
 
+  /**
+   * Sets the currently edited task.
+   * @param task - The task object to be set as editing.
+   */
   setEditingTask(task: {id: number, title: string, description: string, isCompleted: boolean, penaltyPoints: number, creationDate: Date, equipment: {name: string, quantity: number}[]}) {
     this.editingTaskSubject.next(task);
   }
 
+  /**
+   * Resets the currently edited task.
+   */
   resetEditingTask(): void {
   this.editingTaskSubject.next(null);
-}
+  }
 
+  /**
+   * Adds a new task to the task list.
+   * @param newTask - The new task object to be added.
+   */
   addTask(newTask: {
     title: string;
     description: string;
@@ -108,16 +128,29 @@ export class TasksService {
     this.tasks.push(task);
   }
 
+  /**
+   * Calculates the total penalty points for uncompleted tasks.
+   * @returns The total penalty points.
+   */
   getTotalPenaltyPoints(): number{
     return this.tasks
       .filter((task) => !task.isCompleted)
       .reduce((total, task) => total + task.penaltyPoints, 0);
   }
 
+  /**
+   * Gets the count of uncompleted tasks.
+   * @returns The number of uncompleted tasks.
+   */
   getTotalUncompletedTasks() {
     return this.tasks.filter((task) => !task.isCompleted).length;
   }
 
+  /**
+   * Updates the completion status of a task.
+   * @param id - The ID of the task to update.
+   * @param taskInfo - Object containing the updated completion status.
+   */
   updateIsCompleted(id: number, taskInfo: {isCompleted: boolean}): void{
     const task = this.tasks.find(
       (t) => {
@@ -129,6 +162,11 @@ export class TasksService {
     }
   }
 
+  /**
+   * Updates an existing task.
+   * @param id - The ID of the task to update.
+   * @param taskInfo - The updated task object.
+   */
   updateTask(id: number, taskInfo: {id: number, title: string, description: string, isCompleted: boolean, penaltyPoints: number, creationDate: Date, equipment: {name: string, quantity: number}[]}): void{
     const taskIndex = this.tasks.findIndex((t) => t.id === id);
     if (taskIndex !== -1) {

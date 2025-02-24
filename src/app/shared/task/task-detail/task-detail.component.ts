@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 // *************** Application Services Imports ***************
 import { TasksService } from '../../tasks.service';
 import { ShortenPipe } from '../shorten.pipe';
+import { SubSink } from 'subsink';
 
 
 @Component({
@@ -17,6 +18,13 @@ import { ShortenPipe } from '../shorten.pipe';
   providers: [ShortenPipe]
 })
 export class TaskDetailComponent implements OnInit, OnDestroy {
+  // *************** Private Variables ***************
+  private subs: SubSink = new SubSink();
+
+  // *************** State Variables ***************
+  showForm: boolean = false;
+
+  // *************** Misc Variables ***************
   task: {
     id: number;
     title: string;
@@ -27,9 +35,6 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
     equipment: { name: string; quantity: number; }[];
   };
   taskId: number;
-  paramsSubscription: Subscription;
-  editingTaskSubscription: Subscription;
-  showForm: boolean = false;
 
   constructor(
     private taskService: TasksService,
@@ -38,19 +43,12 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.paramsSubscription = this.route.params.subscribe((params: Params) => {
+    this.subs.sink = this.route.params.subscribe((params: Params) => {
       this.taskId = +this.route.snapshot.params['id'];
       this.task = this.taskService.getTask(this.taskId);
     });
     console.log(this.task);
     
-  }
-
-  ngOnDestroy(): void {
-    this.paramsSubscription.unsubscribe();
-    if (this.editingTaskSubscription) {
-      this.editingTaskSubscription.unsubscribe();
-    }
   }
 
   onEdit(): void {
@@ -62,7 +60,7 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
         queryParamsHandling: 'merge',
       });
 
-      this.editingTaskSubscription = this.taskService.editingTask$.subscribe(
+      this.subs.sink = this.taskService.editingTask$.subscribe(
         (updatedTask) => {
           if (updatedTask && updatedTask.id === this.taskId) {
             this.task = updatedTask;
@@ -72,10 +70,10 @@ export class TaskDetailComponent implements OnInit, OnDestroy {
     } else {
       this.task = this.taskService.getTask(this.taskId);
       this.router.navigate(['.'], { relativeTo: this.route, queryParamsHandling: 'merge' });
-
-      if (this.editingTaskSubscription) {
-        this.editingTaskSubscription.unsubscribe();
-      }
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
   }
 }

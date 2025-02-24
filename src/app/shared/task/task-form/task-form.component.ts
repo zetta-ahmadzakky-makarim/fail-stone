@@ -1,10 +1,10 @@
 // *************** Angular Imports ***************
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
 
 // *************** Third-Party Library Imports ***************
-import { Subscription } from 'rxjs';
+import { SubSink } from 'subsink';
 
 // *************** Application Services Imports ***************
 import { TasksService } from '../../tasks.service';
@@ -16,19 +16,26 @@ import { TasksService } from '../../tasks.service';
   styleUrls: ['./task-form.component.css'],
 })
 export class TaskFormComponent implements OnInit, OnDestroy {
-  taskForm: FormGroup;
+  // *************** Private Variables ***************
+  private subs: SubSink = new SubSink();
+  
+  // *************** State Variables ***************
   editMode: boolean = false;
+
+  // *************** Form Variables ***************
+  taskForm: FormGroup;
+
+  // *************** Misc Variables ***************
   taskId: number;
-  valueChangeSubs: Subscription;
-  queryParamsSubs: Subscription;
-  paramsSubs: Subscription;
 
   constructor(
-    private fb: FormBuilder,
     private taskService: TasksService,
     private route: ActivatedRoute
   ) {}
 
+  /**
+   * Initializes component state by setting up the task form and subscribing to route parameters.
+   */
   ngOnInit(): void {
     this.initTaskForm();
     this.taskQueryParamsSubs();
@@ -36,6 +43,9 @@ export class TaskFormComponent implements OnInit, OnDestroy {
     this.formValueChanges();
   }
 
+  /**
+   * Initializes the task form with default values and validators.
+   */
   private initTaskForm(): void{
     this.taskForm = new FormGroup({
       'id': new FormControl<number>(null),
@@ -48,8 +58,11 @@ export class TaskFormComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Subscribes to form value changes and updates the editing task state.
+   */
   private formValueChanges() {
-    this.valueChangeSubs = this.taskForm.valueChanges.subscribe((updatedTask) => {
+    this.subs.sink = this.taskForm.valueChanges.subscribe((updatedTask) => {
       if (this.editMode) {
         const { creationDate, ...taskData } = updatedTask;
         this.taskService.setEditingTask({ id: this.taskId, creationDate: this.taskService.getTask(this.taskId)?.creationDate, ...taskData });
@@ -57,14 +70,20 @@ export class TaskFormComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Subscribes to query parameters to determine edit mode.
+   */
   private taskQueryParamsSubs(): void{
-    this.queryParamsSubs = this.route.queryParams.subscribe((queryParams) => {
+    this.subs.sink = this.route.queryParams.subscribe((queryParams) => {
       this.editMode = queryParams['editMode'] === 'true';
     });
   }
 
+  /**
+   * Subscribes to route parameters, retrieves the task data, and populates the form.
+   */
   private taskParamsSubs(): void{
-    this.paramsSubs = this.route.parent.params.subscribe((param: Params) => {
+    this.subs.sink = this.route.parent.params.subscribe((param: Params) => {
       if (param['id']) {
         this.taskId = +param['id'];
         const task = this.taskService.getTask(this.taskId);
@@ -97,6 +116,9 @@ export class TaskFormComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Adds a new equipment field to the form.
+   */
   onAddEquipment(): void{
     const equipmentArray = this.taskForm.get('equipment') as FormArray;
     console.log('ini equipmentArray', equipmentArray)
@@ -106,6 +128,10 @@ export class TaskFormComponent implements OnInit, OnDestroy {
     }));
   }
 
+  /**
+   * Removes an equipment field from the form.
+   * @param equipmentIndex - Index of the equipment to remove.
+   */
   onRemoveEquipment(equipmentIndex: number): void{
     const equipmentArray = this.taskForm.get('equipment') as FormArray;
     if (equipmentArray.length > 0) {
@@ -113,6 +139,9 @@ export class TaskFormComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Handles form submission, either adding or updating a task.
+   */
   onSubmit(): void{
     if (this.editMode) {
       this.onTaskUpdated()
@@ -125,12 +154,18 @@ export class TaskFormComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Updates an existing task with new form values.
+   */
   private onTaskUpdated(): void{
     this.taskService.updateTask(this.taskId, this.taskForm.value);
     console.log(this.taskForm.value);
     alert('Task ' + this.taskForm.value.title + ' has been updated')
   }
 
+  /**
+   * Adds a new task using form values and resets the form.
+   */
   private onTaskAdded(): void{
     const newTask = this.taskForm.value;
     this.taskService.addTask(this.taskForm.value);
@@ -140,14 +175,21 @@ export class TaskFormComponent implements OnInit, OnDestroy {
     alert('Task ' + newTask.title + ' has been successfully added')
   }
 
+  /**
+   * Retrieves the controls for the equipment form array.
+   */
   get controls() {
     return (this.taskForm.get('equipment') as FormArray).controls;
   }
 
 
+  /**
+   * Validates numeric input to ensure only numbers are entered.
+   * @param event - The keyboard event.
+   * @returns Whether the input is valid.
+   */
   validateNumberInput(event: KeyboardEvent): boolean {
     const charCode = event.which ? event.which : event.keyCode;
-
     if (charCode < 48 || charCode > 57) {
       event.preventDefault();
       return false;
@@ -155,6 +197,10 @@ export class TaskFormComponent implements OnInit, OnDestroy {
     return true;
   }
 
+  /**
+   * Prevents pasting non-numeric text into input fields.
+   * @param event - The clipboard event.
+   */
   preventPasteText(event: ClipboardEvent): void {
     const clipboardData = event.clipboardData || (window as any).clipboardData;
     const pastedText = clipboardData.getData('text');
@@ -164,9 +210,10 @@ export class TaskFormComponent implements OnInit, OnDestroy {
     }
   }
 
+  /**
+ * Cleans up subscriptions when the component is destroyed.
+ */
   ngOnDestroy(): void {
-    this.valueChangeSubs.unsubscribe();
-    this.queryParamsSubs.unsubscribe();
-    this.paramsSubs.unsubscribe();
+    this.subs.unsubscribe();
   }
 }

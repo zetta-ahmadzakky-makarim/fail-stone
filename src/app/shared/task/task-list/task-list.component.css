@@ -3,6 +3,24 @@
     width: 100%;
     margin: 0 auto;
   }
+
+  input {
+    width: 100%;
+    padding: 16px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+    margin-bottom: 8px;
+    margin-top: 16px;
+  }
+  
+  input {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+  }
   
   .task-grid {
     display: grid;

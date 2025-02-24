@@ -11,11 +11,15 @@ import { TasksService } from '../../tasks.service';
   styleUrls: ['./penalty-tracker.component.css']
 })
 export class PenaltyTrackerComponent implements OnInit {
+  // *************** Misc Variables ***************
   totalPenaltyPoints: number = 0;
   totalUncompletedTasks: number = 0;
 
   constructor(private taskService: TasksService) { }
 
+  /**
+   * Initializes component state by retrieving total penalty points and total uncompleted tasks.
+   */
   ngOnInit(): void{
     this.totalPenaltyPoints = this.taskService.getTotalPenaltyPoints();
     this.totalUncompletedTasks = this.taskService.getTotalUncompletedTasks();
